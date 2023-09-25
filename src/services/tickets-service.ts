@@ -14,7 +14,6 @@ async function getUserTickets(userId: number): Promise<Ticket> {
 }
 
 async function postNewTicket(userId: number, typeId: number) {
-    if (!typeId) throw invalidDataError("insufficient information")
     const enrollmentId = await ticketsRepository.findUserTicket(userId)
     const newTicket = await ticketsRepository.postTickets(enrollmentId.id, typeId)
     if (!enrollmentId || !newTicket) throw notFoundError()
