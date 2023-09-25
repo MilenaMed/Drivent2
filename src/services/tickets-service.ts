@@ -16,7 +16,8 @@ async function getUserTickets(userId: number): Promise<Ticket> {
 async function postNewTicket(userId: number, ticketId: number) {
     const enrollment = await ticketsRepository.findEnrollment(userId)
     if (!enrollment) throw notFoundError()
-    if (!ticketId) throw tickedNotFoundError()
+    const ticketTypeId = await ticketsRepository.findTicketType(ticketId)
+    if (!ticketTypeId) throw tickedNotFoundError()
     const newTicket = await ticketsRepository.postTickets(enrollment.id, ticketId)
     if (!newTicket) throw notFoundError()
     return newTicket

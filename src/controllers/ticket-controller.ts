@@ -1,8 +1,9 @@
+import { Request, Response } from 'express';
+import httpStatus from 'http-status';
 import { AuthenticatedRequest } from '@/middlewares';
 import { TicketId } from '@/protocols';
 import { ticketsService } from '@/services/tickets-service';
-import { Request, Response } from 'express';
-import httpStatus from 'http-status';
+
 
 export async function getAllTickets(req: Request, res: Response) {
   const allTickets = await ticketsService.getTickets()
