@@ -16,7 +16,23 @@ async function findUserTicket(userId: number){
     return ticket;
   }
 
+  async function postTickets(enrollmentId: number, ticketTypeId: number) {
+    const newTicket = await prisma.ticket.create({
+        data: {
+            ticketTypeId,
+            enrollmentId,
+            status: 'RESERVED'
+        },
+        include: {
+            TicketType: true
+        }
+    })
+    return newTicket
+}
+
+
 export const ticketsRepository = {
     findTickets,
-    findUserTicket
+    findUserTicket,
+    postTickets
 };
