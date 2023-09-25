@@ -3,6 +3,10 @@ export type ApplicationError = {
   message: string;
 };
 
+export type TicketId = {
+  ticketId: number;
+};
+
 export type RequestError = {
   status: number;
   data: object | null;
