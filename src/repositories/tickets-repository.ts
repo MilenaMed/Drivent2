@@ -20,7 +20,7 @@ async function findEnrollment(userId: number) {
   const enrollment = await prisma.enrollment.findUnique({
     where: { userId },
   })
-
+  //console.log(enrollment)
   return enrollment
 }
 
@@ -37,7 +37,6 @@ async function postTickets(enrollmentId: number, ticketTypeId: number) {
   })
   return newTicket
 }
-
 
 export const ticketsRepository = {
   findTickets,
