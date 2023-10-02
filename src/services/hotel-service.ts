@@ -7,9 +7,10 @@ import httpStatus = require("http-status");
 
 async function getHotels(userId: number): Promise<Hotel[]> {
     const enrollment = await enrollmentRepository.findWithAddressByUserId(userId);
+    console.log(enrollment)
     const ticket = await ticketsRepository.findTicketByEnrollmentId(enrollment.id);
     if (!ticket || !enrollment) throw notFoundError();
-    if (ticket.status == "RESERVED") throw httpStatus.PAYMENT_REQUIRED;
+    if (ticket.status === "RESERVED") throw httpStatus.PAYMENT_REQUIRED;
     if (ticket.TicketType.isRemote === true || ticket.TicketType.includesHotel !== true) throw httpStatus.PAYMENT_REQUIRED;
 
     const hotels = await hotelsRepository.findHotels();
@@ -17,7 +18,6 @@ async function getHotels(userId: number): Promise<Hotel[]> {
 
     return hotels;
 }
-
 const hotelsService = {
     getHotels
 };
