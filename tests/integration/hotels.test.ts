@@ -46,11 +46,20 @@ describe('GET /hotels', () => {
 
         expect(response.status).toBe(httpStatus.UNAUTHORIZED);
     });
+    describe('when token is valid', () => {
+        it("should respond with 404 if don't exists enrollment", async () => {
+            const user = await createUser()
+            const token = await generateValidToken(user);
+            const response = await server.get('/hotels').set('Authorization', `Bearer ${token}`);
+
+            expect(response.status).toBe(httpStatus.NOT_FOUND);
+        });
+    });
 })
 
 describe('GET /hotels/:hotelId', () => {
     it('should respond with status 401 if no token is given', async () => {
-        const response = await server.get('/hotels');
+        const response = await server.get('/hotels/1');
 
         expect(response.status).toBe(httpStatus.UNAUTHORIZED);
     });
@@ -71,4 +80,13 @@ describe('GET /hotels/:hotelId', () => {
 
         expect(response.status).toBe(httpStatus.UNAUTHORIZED);
     });
+    describe('when token is valid', () => {
+        it("should respond with 404 if don't exists enrollment", async () => {
+            const user = await createUser()
+            const token = await generateValidToken(user);
+            const response = await server.get('/hotels/1').set('Authorization', `Bearer ${token}`);
+
+            expect(response.status).toBe(httpStatus.NOT_FOUND);
+        });
+    })
 });
