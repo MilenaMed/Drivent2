@@ -4,7 +4,6 @@ import { notFoundError } from "@/errors";
 import { hotelsRepository } from "@/repositories/hotels-repository";
 import httpStatus = require("http-status");
 
-
 async function getHotels(userId: number): Promise<Hotel[]> {
     const enrollment = await enrollmentRepository.findWithAddressByUserId(userId);
     const ticket = await ticketsRepository.findTicketByEnrollmentId(enrollment.id);
@@ -17,6 +16,7 @@ async function getHotels(userId: number): Promise<Hotel[]> {
 
     return hotels;
 }
+
 async function findHotel(userId : number, hotelId:number) {
     const enrollment = await enrollmentRepository.findWithAddressByUserId(userId);
     console.log(enrollment)
@@ -24,12 +24,15 @@ async function findHotel(userId : number, hotelId:number) {
     if (!ticket || !enrollment) throw notFoundError();
     if (ticket.status === "RESERVED") throw httpStatus.PAYMENT_REQUIRED;
     if (ticket.TicketType.isRemote === true || ticket.TicketType.includesHotel !== true) throw httpStatus.PAYMENT_REQUIRED;
+
+    const hotelRooms: Hotel = await hotelsRepository.findHotelRoom(hotelId);
+    if (!hotelRooms) throw notFoundError();
+    return hotelRooms;
 }
 
 const hotelsService = {
     getHotels,
     findHotel,
 };
-
 
 export default hotelsService;
