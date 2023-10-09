@@ -1,4 +1,4 @@
-import { enrollmentNotFoundError, notFoundError } from "@/errors";
+import { enrollmentNotFoundError, invalidDataError, notFoundError } from "@/errors";
 import { forbiddenError } from "@/errors/forbidden-error";
 import { bookingRepository } from "@/repositories";
 import { TicketStatus } from "@prisma/client";
@@ -30,6 +30,7 @@ async function createBooking(roomId: number, userId: number) {
 }
 
 export async function updateBooking(userId: number, roomId: number, bookingId: number) {
+    if(!roomId) throw invalidDataError("room id is required")
     const booking = await bookingRepository.getBookingById(userId);
     const room = await bookingRepository.findRoom(roomId);
     if (!room) throw notFoundError();
