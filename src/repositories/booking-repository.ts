@@ -31,11 +31,11 @@ async function findRoom(roomId: number) {
     const result = await prisma.room.findFirst({
         where: {
             id: roomId,
-          },
-          include: {
+        },
+        include: {
             Booking: true,
-          },
-        });
+        },
+    });
     return result
 }
 
@@ -55,11 +55,23 @@ async function findTicket(enrollmentId: number) {
     return result
 }
 
+async function updateBooking(roomId: number, bookingId: number) {
+    const newBooking = prisma.booking.update({
+        where: {
+            id: bookingId,
+        },
+        data: {
+            roomId,
+        },
+    });
+    return newBooking;
+}
 
 export const bookingRepository = {
     getBookingById,
     findTicket,
     findEnrollmentId,
     createBooking,
-    findRoom
+    findRoom,
+    updateBooking
 }
