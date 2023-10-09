@@ -14,6 +14,52 @@ async function getBookingById(userId: number) {
     return { id: booking.id, Room: booking.Room };
 }
 
+async function createBooking(userId: number, roomId: number) {
+    const result = await prisma.booking.create({
+        data: {
+            userId,
+            roomId
+        },
+        select: {
+            id: true
+        }
+    })
+    return result
+}
+
+async function findRoom(roomId: number) {
+    const result = await prisma.room.findFirst({
+        where: {
+            id: roomId,
+          },
+          include: {
+            Booking: true,
+          },
+        });
+    return result
+}
+
+async function findEnrollmentId(userId: number) {
+    const result = await prisma.enrollment.findFirst({
+        where: { userId },
+        select: { id: true }
+    })
+    return result
+}
+
+async function findTicket(enrollmentId: number) {
+    const result = await prisma.ticket.findFirst({
+        where: { enrollmentId },
+        include: { TicketType: true }
+    })
+    return result
+}
+
+
 export const bookingRepository = {
-    getBookingById
+    getBookingById,
+    findTicket,
+    findEnrollmentId,
+    createBooking,
+    findRoom
 }
